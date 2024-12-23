@@ -37,8 +37,8 @@ This project seeks to revolutionize claims management by leveraging machine lear
 
 - **Machine Learning Project.pdf**: Comprehensive documentation of the project goals, dataset descriptions, and evaluation criteria.
 - **Machine_Learning_Group43_Report.pdf**: Final report with every step documented and deep analysis of the work done in our notebooks
-- **Part 1 - Initial Inspection.ipynb**: Exploratory Data Analysis (EDA) with summary statistics and an overview of key variables.
-- **Part 2 - Visual Exploration.ipynb**: In-depth visual analysis to uncover patterns and relationships in the data.
+- **Part 1 - Initial Inspection.ipynb**: Initial exploration of the dataset.
+- **Part 2 - Visual Exploration.ipynb**: Comprehensive Exploratory Data Analysis (EDA) focusing on visualizations to uncover patterns, relationships, and distributions in the data.
 - **Part 3 - PreProcess, Feature Selection, Model.ipynb**: Implementation of preprocessing steps, feature selection, and model development.
 - **Part 4 - Open Ended Section.ipynb**: Analysis of how predicting the intermediate variable (*Agreement Reached*) impacts the performance of the final model.
 
