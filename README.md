@@ -7,12 +7,11 @@
 - Matilde Domingues
 - Rodrigo Miranda
 
----
-
 # Workplace Injury Claim Prediction Project
 
-Welcome to the **Workplace Injury Claim Prediction Project**, a comprehensive machine learning initiative designed to enhance the efficiency of the **New York Workers' Compensation Board (WCB)**. 
----
+Welcome to the Workplace Injury Claim Prediction Project, a comprehensive machine learning initiative designed to enhance the efficiency of the New York Workers' Compensation Board (WCB).
+
+This project leverages advanced data analysis and predictive modeling techniques to automate and optimize the management of workplace injury claims.
 
 By adopting a data-driven approach, this project aims to:
 - Minimize manual effort in claims management.
