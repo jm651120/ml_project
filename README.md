@@ -35,7 +35,7 @@ This project seeks to revolutionize claims management by leveraging machine lear
 
 ## Repository Structure
 
-- **Machine Learning Project.pdf**: Comprehensive documentation of the project goals, dataset descriptions, and evaluation criteria.
+- **Project Description.pdf**: Comprehensive documentation of the project goals, dataset descriptions, and evaluation criteria.
 - **Machine_Learning_Group43_Report.pdf**: Final report with every step documented and deep analysis of the work done in our notebooks
 - **Part 1 - Initial Inspection.ipynb**: Initial exploration of the dataset.
 - **Part 2 - Visual Exploration.ipynb**: Comprehensive Exploratory Data Analysis (EDA) focusing on visualizations to uncover patterns, relationships, and distributions in the data.
