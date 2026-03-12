@@ -1,105 +1,85 @@
-# Machine-Learning: To Grant or not to Grant: Deciding on Compensation Benefits
+# 📊 To Grant or not to Grant: Multiclass Prediction of Compensation Benefits
 
-## Project Developed By:
-- Beatriz Fonseca
-- João Marques
-- Martim Tavares
-- Matilde Domingues
-- Rodrigo Miranda
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![XGBoost](https://img.shields.io/badge/XGBoost-FF6600?style=flat)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat&logo=pandas&logoColor=white)
+
+**Developed by:** Beatriz Fonseca, João Marques, Martim Tavares, Matilde Domingues, Rodrigo Miranda
 
 ---
 
 ## Table of Contents
-- [Workplace Injury Claim Prediction Project](#workplace-injury-claim-prediction-project)
-- [Repository Structure](#repository-structure)
-- [Model Comparison Table](#model-comparison-table)
-- [Workflow: Preprocessing Pipeline](#workflow-preprocessing-pipeline)
-- [Results Summary](#results-summary)
-- [Future Work](#future-work)
-- [Data Access Note](#data-access-note)
-- [Acknowledgments](#acknowledgments)
+
+1. [Project Overview](#project-overview)
+2. [Repository Structure](#repository-structure)
+3. [Methodology & Preprocessing](#methodology--preprocessing)
+4. [Model Evaluation & Comparison](#model-evaluation--comparison)
+5. [Results & Key Insights](#results--key-insights)
+6. [Future Work](#future-work)
 
 ---
 
-## Workplace Injury Claim Prediction Project
+## Project Overview
 
-Each year, the **New York Workers' Compensation Board (WCB)** processes thousands of workplace injury claims. These claims are often reviewed manually, leading to inefficiencies, delays, and inconsistencies that can impact injured workers and burden the WCB with additional costs. 
+Each year, the New York Workers' Compensation Board (WCB) processes thousands of workplace injury claims. This project leverages machine learning to predict the **Claim Injury Type** — a multiclass classification problem — with the goal of automating claims management and improving decision accuracy.
 
-This project seeks to revolutionize claims management by leveraging machine learning to provide a scalable, efficient, and accurate solution. Our goals are to:
-- Automate the classification of injury claims.
-- Improve the consistency and accuracy of decisions.
-- Reduce manual effort in claims management.
-- Provide valuable insights into the factors influencing claim outcomes.
+The primary challenge was a **severe class imbalance**: the majority class accounted for over 50% of claims, while minority classes (e.g., `PTD`, `DEATH`) represented less than 1% of the data. Our pipeline was built specifically to handle this real-world imbalance robustly.
 
 ---
 
 ## Repository Structure
-
-- **Project Description.pdf**: Comprehensive documentation of the project goals, dataset descriptions, and evaluation criteria.
-- **Machine_Learning_Group43_Report.pdf**: Final report with every step documented and deep analysis of the work done in our notebooks
-- **Part 1 - Initial Inspection.ipynb**: Initial exploration of the dataset.
-- **Part 2 - Visual Exploration.ipynb**: Comprehensive Exploratory Data Analysis (EDA) focusing on visualizations to uncover patterns, relationships, and distributions in the data.
-- **Part 3 - PreProcess, Feature Selection, Model.ipynb**: Implementation of preprocessing steps, feature selection, and model development.
-- **Part 4 - Open Ended Section.ipynb**: Analysis of how predicting the intermediate variable (*Agreement Reached*) impacts the performance of the final model.
-
----
-
-## Model Comparison Table
-
-The table below summarizes the performance of different machine learning models used in this project. The metrics include F1 Macro scores for training and validation datasets, as well as the difference between the two.
-
-| F1 Macro       | XGBoost | Neural Networks | Decision Tree | Bagging | Logistic Regression | Random Forest | Stacking |
-|----------------|---------|-----------------|---------------|---------|---------------------|---------------|----------|
-| **train**      | 0.4534  | 0.4156          | 0.4444        | 0.4230  | 0.3762              | 0.4029        | 0.3932   |
-| **val**        | 0.4317  | 0.4071          | 0.4047        | 0.4058  | 0.3743              | 0.3246        | 0.3903   |
-| **train - val**| 0.0217  | 0.0085          | 0.0397        | 0.0172  | 0.0019              | 0.0783        | 0.0029   |
+```
+├── Project Description.pdf               # Project goals, dataset descriptions, and evaluation criteria
+├── Machine_Learning_Group43_Report.pdf   # Final report documenting methodology and analysis
+├── Part 1 - Initial Inspection.ipynb     # Data type corrections and initial exploration
+├── Part 2 - Visual Exploration.ipynb     # EDA, correlation heatmaps, and Cramér's V associations
+├── Part 3 - PreProcess, Feature          # Custom preprocessing pipeline, feature selection,
+│            Selection, Model.ipynb       # and model training
+└── Part 4 - Open Ended Section.ipynb     # Analysis of intermediate variable prediction
+                                          # (Agreement Reached) and its impact on the final model
+```
 
 ---
 
-## Workflow: Preprocessing Pipeline
+## Methodology & Preprocessing
 
-The preprocessing pipeline used in this project includes the following steps, ensuring the data is clean, standardized, and ready for modeling:
-- **ClipOutliersMulti**: Identifies and caps extreme outliers to reduce their influence on model training.
-- **MinMaxScaler**: Scales numeric features to a range between 0 and 1, improving model convergence.
-- **OneHotEncoder**: Converts categorical variables into binary vectors for compatibility with machine learning models.
-- **FrequencyEncoder**: Encodes high-cardinality categorical variables based on the frequency of each category.
-- **SampleKNNImputer**: Fills missing values using k-Nearest Neighbors, ensuring imputation reflects data patterns.
-- **ConvertDataType**: Ensures all variables are in the correct data type for analysis and modeling.
-- **FixCodes**: Corrects inconsistencies in categorical code features, such as 'Gender' or 'Zip Code'.
-- **ZeroFillImputer**: Replaces missing numeric values with zero, particularly for variables where absence has a logical meaning.
-- **CodeMapper**: Maps categorical codes according to WCB documentation.
+We engineered temporal and behavioral features and built a custom preprocessing pipeline using **scikit-learn**:
+
+- **Outlier Handling (`ClipOutliersMulti`):** Identifies and caps extreme outliers using quantile thresholds.
+- **Imputation (`SampleKNNImputer` & `ZeroFillImputer`):** Fills missing values using k-Nearest Neighbors for complex features, and zero-filling where absence carries logical meaning.
+- **Encoding (`FrequencyEncoder` & `OneHotEncoder`):** Handles high-cardinality categorical variables via frequency encoding, and standard OHE for low-cardinality features.
+- **Feature Selection:** An XGBoost-based selector reduced dimensionality and mitigated overfitting, retaining the optimal ~53 features.
 
 ---
 
-## Results Summary
+## Model Evaluation & Comparison
 
-- The XGBoost model achieved the highest validation F1 Macro score of **0.4317**, showing its strength in handling class imbalance and feature complexities.
-- Predicting the intermediate variable (*Agreement Reached*) didn't show improvement because the class '1' was badly predicted.
-- The feature 'Average Weekly Wage' showed to be the most influential in claims predictions
+All models were benchmarked using **Stratified 5-Fold Cross-Validation**. Given the severe class imbalance, **F1-Macro** was used as the evaluation metric to ensure minority classes were equally penalised.
+
+| Model | Train F1-Macro | Val F1-Macro | Overfit (Train − Val) |
+|---|---|---|---|
+| **XGBoost** | **0.4534** | **0.4317** | **0.0217** |
+| Decision Tree | 0.4444 | 0.4047 | 0.0397 |
+| Bagging (DT) | 0.4230 | 0.4058 | 0.0172 |
+| Neural Network (MLP) | 0.4156 | 0.4071 | 0.0085 |
+| Random Forest | 0.4029 | 0.3246 | 0.0783 |
+| Stacking Classifier | 0.3932 | 0.3903 | 0.0029 |
+| Logistic Regression | 0.3762 | 0.3743 | 0.0019 |
+
+---
+
+## Results & Key Insights
+
+- **Best Model:** XGBoost achieved the highest validation F1-Macro of **0.4317**. L1 (Lasso) and L2 (Ridge) regularisation were critical in reducing overfitting while maintaining generalisation.
+- **Handling Imbalance:** Tree-based models generally outperformed Neural Networks, though all models struggled with extreme minority classes. SMOTE was tested but discarded due to severe overfitting.
+- **Feature Importance:** `Average Weekly Wage` proved to be the single most influential feature for predicting claim injury type.
+- **Intermediate Variable Testing:** Predicting `Agreement Reached` and feeding it into the main model did not improve the final F1 score, primarily due to the low variance of that feature.
 
 ---
 
 ## Future Work
 
-While the project achieved promising results, there are several opportunities for improvement and expansion:
-- Incorporate additional feature selection methods to refine the model and identify the most impactful predictors.
-- Integrate real-time data to enable dynamic predictions for incoming claims.
-- Deploy the best-performing model as an API or web application for easy access and usability by WCB staff.
-
----
-
-## Data Access Note
-
-The dataset used in this project is too large to be included in this repository. For access to the data, please contact any of the project members listed above.
-
----
-
-## Acknowledgments
-
-We would like to thank:
-- **Professor Ricardo Santos** for guidance and feedback throughout the project.
-- Open-source libraries such as **scikit-learn**, **pandas**, and **matplotlib** for their contributions to this analysis.
----
-
-We hope this repository serves as a valuable resource for understanding and applying machine learning to real-world problems. Feel free to contact any of the team members for questions, feedback, or collaborations!
-
+- **Advanced Imbalance Techniques:** Explore class-weighted training, cost-sensitive learning, or alternative sampling methods beyond standard SMOTE.
+- **Ensemble Approaches:** Investigate more complex blending strategies to better capture minority class patterns.
+- **Deployment:** Deploy the best-performing XGBoost model as a REST API for use by WCB staff.
